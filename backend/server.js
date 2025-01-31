@@ -6,11 +6,11 @@ const app = express();
 
 // Explicit CORS configuration to allow requests from your frontend URL
 const corsOptions = {
-    origin: 'https://youtube-rank-ohhvsp87a-chaupham1092s-projects.vercel.app', // Your frontend URL
+    origin: '*', // Allow all origins (or replace with specific frontend URL if needed)
     methods: ['GET', 'POST'],
 };
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(express.json()); // Ensure body parsing middleware is set up
 
 const PORT = process.env.PORT || 10000;
 
@@ -19,9 +19,10 @@ app.get('/', (req, res) => {
     res.send('YouTube Rank Checker Backend is working!');
 });
 
-// Log incoming requests for debugging
+// POST route for checking ranks
 app.post('/check-rank', async (req, res) => {
     console.log('Request Body:', req.body); // Log incoming data for debugging
+
     const { videos, keywords } = req.body;
     const results = [];
 
