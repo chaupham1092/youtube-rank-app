@@ -14,11 +14,20 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
+// Root route to test server availability
+app.get('/', (req, res) => {
+    res.send('YouTube Rank Checker Backend is working!');
+});
+
 // Log incoming requests for debugging
 app.post('/check-rank', async (req, res) => {
     console.log('Request Body:', req.body); // Log incoming data for debugging
     const { videos, keywords } = req.body;
     const results = [];
+
+    if (!videos || videos.length === 0 || !keywords || keywords.length === 0) {
+        return res.status(400).json({ error: 'Both videos and keywords are required' });
+    }
 
     for (let i = 0; i < videos.length; i++) {
         const videoId = extractVideoId(videos[i]);
