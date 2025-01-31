@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Rank Checker</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>YouTube Rank Checker</h1>
+
+    <div>
+        <h2>Enter YouTube Video URLs:</h2>
+        <input type="text" id="video-url" placeholder="Video URL">
+        <button onclick="addVideoUrl()">Add another Video</button>
+        <div id="video-url-list"></div>
+    </div>
+
+    <div>
+        <h2>Enter Keywords:</h2>
+        <input type="text" id="keyword" placeholder="Keyword">
+        <button onclick="addKeyword()">Add another Keyword</button>
+        <div id="keyword-list"></div>
+    </div>
+
+    <button onclick="checkRank()">Check Rankings</button>
+
+    <div id="results"></div>
+
+    <script>
+        let videoUrls = [];
+        let keywords = [];
+
+        function addVideoUrl() {
+            let input = document.getElementById('video-url');
+            if (input.value) {
+                videoUrls.push(input.value);
+                input.value = '';
+                updateVideoList();
+            }
+        }
+
+        function addKeyword() {
+            let input = document.getElementById('keyword');
+            if (input.value) {
+                keywords.push(input.value);
+                input.value = '';
+                updateKeywordList();
+            }
+        }
+
+        function updateVideoList() {
+            let list = document.getElementById('video-url-list');
+            list.innerHTML = '';
+            videoUrls.forEach(url => {
+                let item = document.createElement('div');
+                item.textContent = url;
+                list.appendChild(item);
+            });
+        }
+
+        function updateKeywordList() {
+            let list = document.getElementById('keyword-list');
+            list.innerHTML = '';
+            keywords.forEach(keyword => {
+                let item = document.createElement('div');
+                item.textContent = keyword;
+                list.appendChild(item);
+            });
+        }
+
+        function checkRank() {
+            axios.post('https://your-backend-url.onrender.com/check-rank', { videos: videoUrls, keywords: keywords })
+                .then(response => {
+                    let resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = '';
+                    response.data.results.forEach(result => {
+                        let resultDiv = document.createElement('div');
+                        resultDiv.textContent = `Video: ${result.video} - Keyword: ${result.keyword} - Rank: ${result.rank}`;
+                        resultsDiv.appendChild(resultDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error occurred while checking ranks.');
+                });
+        }
+    </script>
+</body>
+</html>
