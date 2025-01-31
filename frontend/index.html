@@ -70,7 +70,7 @@
         }
 
         function checkRank() {
-            axios.post('https://your-backend-url.onrender.com/check-rank', { videos: videoUrls, keywords: keywords })
+            axios.post('https://youtube-rank-backend.onrender.com', { videos: videoUrls, keywords: keywords })
                 .then(response => {
                     let resultsDiv = document.getElementById('results');
                     resultsDiv.innerHTML = '';
